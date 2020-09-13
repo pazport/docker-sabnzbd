@@ -66,7 +66,6 @@ RUN \
 	subliminal \
 	python-dateutil \
 	stevedore \
-	feedparser==5.2.1 \
 	qtfaststart \
 	setuptools \
 	requests && \
@@ -96,6 +95,7 @@ RUN add-apt-repository ppa:savoury1/ffmpeg4 -y
 RUN apt-get update && apt-get upgrade -y
 RUN apt-get install ffmpeg -y
 RUN apt-get update && apt-get upgrade -y
+RUN pip install -U --no-cache-dir feedparser==5.2.1
 
 # add local files
 COPY root/ /
