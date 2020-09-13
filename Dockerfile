@@ -66,6 +66,7 @@ RUN \
 	subliminal \
 	python-dateutil \
 	stevedore \
+	feedparser==5.2.1 \
 	qtfaststart \
 	setuptools \
 	requests && \
