@@ -7,7 +7,7 @@ ARG SABNZBD_VERSION
 LABEL build_version="Linuxserver.io version:- ${VERSION} Build-date:- ${BUILD_DATE}"
 LABEL maintainer="thelamer"
 
-# environment settings
+# environment settings
 ARG DEBIAN_FRONTEND="noninteractive"
 ENV HOME="/config" \
 PYTHONIOENCODING=utf-8
@@ -54,10 +54,7 @@ RUN \
  pip install -U --no-cache-dir \
 	apprise \
 	pynzb \
-    chardet \
-    requests \
-	requests[security] \
-	requests-cache \
+	chardet \
 	babelfish \
 	tmdbsimple \
 	idna \
@@ -78,7 +75,8 @@ RUN \
 	libffi-dev \
 	libssl-dev \
 	python3-pip && \
- apt-get clean
+ apt-get clean 
+
 #mp4automator
 RUN git clone https://github.com/pazport/sickbeard_mp4_automator.git mp4automator
 RUN chmod -R 777 /mp4automator
@@ -97,7 +95,7 @@ RUN apt-get install ffmpeg -y
 RUN apt-get update && apt-get upgrade -y
 RUN pip install -U --no-cache-dir feedparser==5.2.1
 
-# add local files
+# add local files
 COPY root/ /
 
 # ports and volumes
