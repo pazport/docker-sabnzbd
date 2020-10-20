@@ -87,7 +87,7 @@ RUN apt-get update && apt-get upgrade -y
 
 # add local files
 COPY root/ /
-
+COPY /mp4automator /
 # ports and volumes
 EXPOSE 8080 9090
 VOLUME /config
