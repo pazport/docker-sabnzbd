@@ -7,7 +7,7 @@ ARG SABNZBD_VERSION
 LABEL build_version="Linuxserver.io version:- ${VERSION} Build-date:- ${BUILD_DATE}"
 LABEL maintainer="thelamer"
 
-# environment settings
+# environment settings
 ARG DEBIAN_FRONTEND="noninteractive"
 ENV HOME="/config" \
 PYTHONIOENCODING=utf-8
@@ -34,8 +34,6 @@ RUN \
 	python3-cryptography \
 	python3-distutils \
 	python3-pip \
-	ffmpeg \
-	nano \
 	git \
 	unrar && \
  if [ -z ${SABNZBD_VERSION+x} ]; then \
@@ -54,18 +52,19 @@ RUN \
  pip install -U --no-cache-dir \
 	apprise \
 	pynzb \
-	chardet \
+	requests \
 	babelfish \
-	tmdbsimple \
-	idna \
-	mutagen \
-	guessit \
-	subliminal \
-	python-dateutil \
-	stevedore \
-	qtfaststart \
-	setuptools \
-	requests && \
+	requests \
+    requests[security] \
+    requests-cache \
+    babelfish \
+    tmdbsimple \
+    mutagen \
+    guessit \
+    subliminal \
+    python-dateutil \
+    stevedore \
+    qtfaststart && \
  pip install -U --no-cache-dir -r requirements.txt && \
  echo "**** cleanup ****" && \
  ln -s \
@@ -75,7 +74,8 @@ RUN \
 	libffi-dev \
 	libssl-dev \
 	python3-pip && \
- apt-get clean 
+ apt-get clean
+
 
 #mp4automator
 RUN git clone https://github.com/pazport/sickbeard_mp4_automator.git mp4automator
