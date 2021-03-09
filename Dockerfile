@@ -43,10 +43,11 @@ RUN \
  git clone https://github.com/sabnzbd/sabnzbd.git && \
  cd sabnzbd && \
  git checkout master && \
-  pip3 install --no-cache-dir \
+  pip3 install -U pip --no-cache-dir \
     apprise \
     chardet \
     pynzb \
+	setuptools \
     requests \
 	requests[security] \
 	requests-cache \
