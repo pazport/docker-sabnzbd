@@ -70,12 +70,7 @@ RUN \
 	stevedore \
 	qtfaststart \
     sabyenc && \
- pip install -U --no-cache-dir -r requirements.txt && \
- echo "**** cleanup ****" && \
- ln -s \
-	/usr/bin/python3 \
-	/usr/bin/python && \
- apt-get clean
+ pip install -U --no-cache-dir -r requirements.txt
 
  #mp4automator
 RUN git clone https://github.com/pazport/sickbeard_mp4_automator.git /mp4automator
