@@ -22,7 +22,6 @@ RUN \
 	python3-cryptography \
 	python3-distutils \
 	python-sabyenc \
-	par2-tbb \
 	python3-pip \
 	nano \
         git \
