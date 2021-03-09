@@ -57,7 +57,19 @@ RUN \
  pip install -U --no-cache-dir \
 	apprise \
 	pynzb \
-	requests && \
+	requests \
+	requests[security] \
+	requests-cache \
+	babelfish \
+	tmdbsimple \
+	idna \
+	mutagen \
+	guessit \
+	subliminal \
+	python-dateutil \
+	stevedore \
+	qtfaststart \
+    sabyenc && \
  pip install -U --no-cache-dir -r requirements.txt && \
  echo "**** cleanup ****" && \
  ln -s \
