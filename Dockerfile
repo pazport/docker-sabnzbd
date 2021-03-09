@@ -34,6 +34,9 @@ RUN \
 	python3-cryptography \
 	python3-distutils \
 	python3-pip \
+	ffmpeg \
+    nano \
+	git \
 	unrar && \
  if [ -z ${SABNZBD_VERSION+x} ]; then \
 	SABNZBD_VERSION=$(curl -s https://api.github.com/repos/sabnzbd/sabnzbd/releases/latest \
@@ -51,6 +54,20 @@ RUN \
  pip install -U --no-cache-dir \
 	apprise \
 	pynzb \
+	 chardet \
+    requests \
+	requests[security] \
+	requests-cache \
+	babelfish \
+	tmdbsimple \
+	idna \
+	mutagen \
+	guessit \
+	subliminal \
+	python-dateutil \
+	stevedore \
+	qtfaststart \
+	setuptools \
 	requests && \
  pip install -U --no-cache-dir -r requirements.txt && \
  echo "**** cleanup ****" && \
@@ -61,12 +78,24 @@ RUN \
 	libffi-dev \
 	libssl-dev \
 	python3-pip && \
- apt-get clean && \
- rm -rf \
-	/tmp/* \
-	/var/lib/apt/lists/* \
-	/var/tmp/* \
-	$HOME/.cache
+ apt-get clean
+
+ #mp4automator
+RUN git clone https://github.com/pazport/sickbeard_mp4_automator.git mp4automator
+RUN chmod -R 777 /mp4automator
+RUN chown -R 1000:1000 /mp4automator
+RUN ln -s /config/mp4automator /mp4automator
+
+#update and install latest ffmpeg
+RUN pip3 install -U pip --no-cache-dir
+RUN apt-get update && apt-get upgrade -y
+RUN apt-get install software-properties-common -y
+RUN add-apt-repository ppa:savoury1/graphics -y
+RUN add-apt-repository ppa:savoury1/multimedia -y
+RUN add-apt-repository ppa:savoury1/ffmpeg4 -y
+RUN apt-get update && apt-get upgrade -y
+RUN apt-get install ffmpeg -y
+RUN apt-get update && apt-get upgrade -y
 
 # add local files
 COPY root/ /
