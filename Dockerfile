@@ -21,6 +21,8 @@ RUN \
 	python3 \
 	python3-cryptography \
 	python3-distutils \
+	python-sabyenc \
+	par2-tbb \
 	python3-pip \
 	nano \
         git \
@@ -41,23 +43,11 @@ RUN \
  git clone https://github.com/sabnzbd/sabnzbd.git && \
  cd sabnzbd && \
  git checkout master && \
- pip3 install -U pip \
- requests[security] \
-	requests-cache \
-	babelfish \
-	tmdbsimple \
-	idna \
-	mutagen \
-	guessit \
-	subliminal \
-	python-dateutil \
-	stevedore \
-	qtfaststart \
-    sabyenc && \
- pip install -U --no-cache-dir \
-	apprise \
-	pynzb \
-	requests \
+  pip3 install --no-cache-dir \
+    apprise \
+    chardet \
+    pynzb \
+    requests \
 	requests[security] \
 	requests-cache \
 	babelfish \
