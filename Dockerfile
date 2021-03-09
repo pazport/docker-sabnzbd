@@ -79,13 +79,9 @@ RUN apt upgrade -y
 
 WORKDIR /opt/sabnzbd
 COPY start.sh .
-COPY healthcheck.sh .
 RUN chmod +x *.sh
 
 EXPOSE 8080
 VOLUME /config
-
-HEALTHCHECK --interval=90s --timeout=10s \
-  CMD /opt/sabnzbd/healthcheck.sh
 
 ENTRYPOINT ["/opt/sabnzbd/start.sh"]
