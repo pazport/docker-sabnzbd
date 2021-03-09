@@ -1,66 +1,55 @@
-FROM debian:buster-slim
+FROM linuxserver/sabnzbd
+LABEL maintainer="RandomNinjaAtk"
 
-# environment settings
-ARG DEBIAN_FRONTEND="noninteractive"
-ENV HOME="/config" \
-PYTHONIOENCODING=utf-8
+ENV TITLE="SABnzbd Extended"
+ENV VERSION="1.0.10"
+ENV SMA_PATH /usr/local/sma
+ENV VIDEO_LANG eng
+ENV VIDEO_SMA FALSE
+ENV VIDEO_SMA_TAGGING FALSE
+ENV AUDIO_VERIFY TRUE
+ENV AUDIO_FORMAT FLAC
+ENV AUDIO_BITRATE 320
+ENV AUDIO_REPLAYGAIN FALSE
+ENV AUDIO_DSFA TRUE
+ENV AUDIO_DSFAS 150M
 
-RUN \
- echo "**** install apt-transport-https first ****" && \
- apt-get update && \
- apt-get install -y apt-transport-https gnupg2 curl && \
- echo "**** install packages ****" && \
- echo "deb http://ftp.nl.debian.org/debian buster main non-free" >> /etc/apt/sources.list.d/sabnzbd.list && \
- apt-get update && \
- apt-get install -y \
-	libffi-dev \
-	libssl-dev \
-	p7zip-full \
-	automake \
-	make \
-	python3 \
-	python3-cryptography \
-	python3-distutils \
-	python-sabyenc \
-	python3-pip \
-	nano \
-        git \
-	unrar && \
- echo "**** installing par2cmdline ****" && \
- git clone https://github.com/Parchive/par2cmdline.git && \
- cd par2cmdline && \
- aclocal && \
- automake --add-missing && \
- autoconf && \
- ./configure && \
- make && \
- make install && \
- cd / && \
- rm -rf par2cmdline && \
- echo "**** installing sabnzbd ****" && \
- cd /opt && \
- git clone https://github.com/sabnzbd/sabnzbd.git && \
- cd sabnzbd && \
- git checkout master && \
-  pip3 install -U pip --no-cache-dir \
-    apprise \
-    chardet \
-    pynzb \
-	setuptools \
-    requests \
-	requests[security] \
-	requests-cache \
-	babelfish \
-	tmdbsimple \
-	idna \
-	mutagen \
-	guessit \
-	subliminal \
-	python-dateutil \
-	stevedore \
-	qtfaststart \
-    sabyenc && \
- pip install -U --no-cache-dir -r requirements.txt
+RUN  \
+echo "************ install dependencies ************" && \
+	apt-get update && \
+	apt-get install -y software-properties-common && \
+	add-apt-repository ppa:jonathonf/ffmpeg-4 -y && \
+	echo "************ install and update packages ************" && \
+	apt-get update && \
+	apt-get install -y \
+		mkvtoolnix \
+		mp3val \
+		flac \
+		opus-tools \
+		jq \
+		git \
+		ffmpeg \
+		python3 \
+		python3-pip && \
+	apt-get purge --auto-remove -y && \
+	apt-get clean && \
+	echo "************ setup SMA ************" && \
+	echo "************ setup directory ************" && \
+	mkdir -p ${SMA_PATH} && \
+	echo "************ download repo ************" && \
+	git clone https://github.com/mdhiggins/sickbeard_mp4_automator.git ${SMA_PATH} && \
+	mkdir -p ${SMA_PATH}/config && \
+	echo "************ create logging file ************" && \
+	mkdir -p ${SMA_PATH}/config && \
+	touch ${SMA_PATH}/config/sma.log && \
+	chgrp users ${SMA_PATH}/config/sma.log && \
+	chmod g+w ${SMA_PATH}/config/sma.log && \
+	echo "************ install pip dependencies ************" && \
+	python3 -m pip install --user --upgrade pip && \	
+ 	pip3 install -r ${SMA_PATH}/setup/requirements.txt && \
+	echo "************ install beets ************" && \
+	pip3 install https://github.com/beetbox/beets/tarball/master && \
+	pip3 install pyacoustid
 
  #mp4automator
 RUN git clone https://github.com/pazport/sickbeard_mp4_automator.git /mp4automator
@@ -77,11 +66,13 @@ RUN apt-get install ffmpeg -y
 RUN apt-get update 
 RUN apt upgrade -y
 
-WORKDIR /opt/sabnzbd
-COPY start.sh .
-RUN chmod +x *.sh
 
-EXPOSE 8080
+# copy local files
+COPY root/ /
+
+# set work directory
+WORKDIR /config
+
+# ports and volumes
+EXPOSE 8080 9090
 VOLUME /config
-
-ENTRYPOINT ["/opt/sabnzbd/start.sh"]
