@@ -1,5 +1,6 @@
 FROM linuxserver/sabnzbd
-LABEL maintainer="RandomNinjaAtk"
+LABEL build_version="Linuxserver.io version:- ${VERSION} Build-date:- ${BUILD_DATE}"
+LABEL maintainer="thelamer"
 
 ENV TITLE="SABnzbd Extended"
 ENV VERSION="1.0.10"
@@ -46,27 +47,21 @@ echo "************ install dependencies ************" && \
 	chmod g+w ${SMA_PATH}/config/sma.log && \
 	echo "************ install pip dependencies ************" && \
 	python3 -m pip install --user --upgrade pip && \	
- 	pip3 install -r ${SMA_PATH}/setup/requirements.txt && \
-	echo "************ install beets ************" && \
-	pip3 install https://github.com/beetbox/beets/tarball/master && \
-	pip3 install pyacoustid
-
- #mp4automator
-RUN git clone https://github.com/pazport/sickbeard_mp4_automator.git /mp4automator
-RUN chmod -R 777 /mp4automator
-RUN chown -R 1000:1000 /mp4automator
-RUN ln -s /config/mp4automator /mp4automator
-
-#update and install latest ffmpeg
-RUN pip3 install -U pip --no-cache-dir
-RUN apt-get install software-properties-common -y
-RUN apt-get update
-RUN apt-get upgrade -y
-RUN apt-get install ffmpeg -y
-RUN apt-get update 
-RUN apt upgrade -y
-
-
+	pip3 install \
+	 pyacoustid \
+	 requests \
+    idna \
+    requests-cache \
+    babelfish \
+    tmdbsimple \
+    mutagen \
+    guessit \
+    subliminal \
+    python-dateutil \
+    stevedore \
+    qtfaststart \
+    pymediainfo 
+	
 # copy local files
 COPY root/ /
 
