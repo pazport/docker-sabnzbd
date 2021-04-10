@@ -71,3 +71,4 @@ WORKDIR /config
 # ports and volumes
 EXPOSE 8080 9090
 VOLUME /config
+VOLUME ${SMA_PATH} /
